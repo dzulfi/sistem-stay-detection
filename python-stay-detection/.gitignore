@@ -1,0 +1,14 @@
+# dependencies
+/__pycache__
+/.idea
+/.venv
+/app/__pycache__
+/captures
+
+
+# file
+log_stay.json
+
+# yolo
+yolov8n.pt
+yolov8s.pt

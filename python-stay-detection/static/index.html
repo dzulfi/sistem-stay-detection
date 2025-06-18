@@ -1,0 +1,74 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Room Monitor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    #video-stream {
+      border: 4px solid #333;
+      width: 800px;
+      height: auto;
+    }
+    table {
+      margin: 20px auto;
+      border-collapse: collapse;
+      width: 60%;
+      background: #fff;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+    }
+    th {
+      background: #333;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Live Room Presence Monitor</h1>
+  <img id="video-stream" src="{{ url_for('video_feed') }}" alt="Live Stream">
+  
+  <h2>Active Persons</h2>
+  <table id="presence-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Durasi</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    function fetchPresence() {
+      fetch('/status')
+        .then(res => res.json())
+        .then(data => {
+          const tbody = document.querySelector("#presence-table tbody");
+          tbody.innerHTML = '';
+          Object.keys(data).forEach(id => {
+            const row = `<tr>
+              <td>${id}</td>
+              <td>${data[id].duration}</td>
+            </tr>`;
+            tbody.innerHTML += row;
+          });
+        });
+    }
+
+    setInterval(fetchPresence, 12); // update setiap 1 detik
+    fetchPresence();
+  </script>
+</body>
+</html>
