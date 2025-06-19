@@ -11,6 +11,7 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     try {
       const cameras = await collection.find({}).toArray();
+      console.log(cameras);
       res.status(200).json(cameras);
     } catch (error) {
       console.error('Failed to fetch cameras:', error);

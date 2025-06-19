@@ -27,11 +27,11 @@ class VideoStream:
 
 class StreamProcessor:
   # menangkap real time camera cctv
-  def __init__(self):
+  def __init__(self, camera_url):
     # self.cap = cv2.VideoCapture("rtsp://admin:Joglo631999@192.168.200.40:554/live/0/MAIN", cv2.CAP_FFMPEG)
     # camera = "rtsp://admin:Joglo631999@192.168.200.40:554/live/0/MAIN"
-    camera = "rtsp://192.168.200.23:554/LiveMedia/ch1/Media2?src=onvif"
-    self.cap = VideoStream(camera)
+    # camera = "rtsp://192.168.200.23:554/LiveMedia/ch1/Media2?src=onvif"
+    self.cap = VideoStream(camera_url)
     self.detector = PersonDetector()
     self.tracker = CentroidTracker()
     self.logger = Logger()
