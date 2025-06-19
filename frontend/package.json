@@ -1,0 +1,24 @@
+{
+  "name": "koneksi-nextjs-mongodb",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "-": "^0.0.1",
+    "install": "^0.13.0",
+    "latest": "^0.2.0",
+    "mongoose": "^8.15.1",
+    "next": "15.3.3",
+    "onvif": "^0.8.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^2.15.3",
+    "stable": "^0.1.8",
+    "version": "^0.1.2"
+  }
+}
