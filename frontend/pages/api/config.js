@@ -55,18 +55,52 @@ export default async function handler(req, res) {
     }
   } else if (req.method === 'PUT') {
     try {
-      const { _id, ...updatedData } = req.body;
+      const { _id, name_camera, username, password, ip_address, port, ...rest } = req.body;
+
       if (!_id) {
         return res.status(400).json({ message: 'Missing camera ID' });
       }
+
+      const updateData = { name_camera, username, password, ip_address, port, ...rest };
+
+      // Cek apakah ip/port/username/password diberikan, jika ya maka update string_uri
+      if (ip_address && port) {
+        try {
+          const cam = new Cam({
+            username: username || '',
+            password: password || '',
+            hostname: ip_address,
+            port: port
+          });
+
+          await cam.connect();
+          const profile = cam.profiles[0];
+          const stringUri = await cam.getStreamUri({
+            profileToken: profile.$.token,
+            protocol: 'RTSP'
+          });
+
+          const url = new URL(stringUri.uri);
+          url.username = username || '';
+          url.password = password || '';
+          updateData.string_uri = url.href;
+        } catch (onvifErr) {
+          console.error('ONVIF update failed:', onvifErr.message);
+          return res.status(400).json({ error: 'ONVIF connection failed' });
+        }
+      }
+
       const result = await collection.updateOne(
         { _id: new ObjectId(_id) },
-        { $set: updatedData }
+        { $set: updateData }
       );
+
       if (result.matchedCount === 0) {
         return res.status(404).json({ message: 'Camera not found' });
       }
+
       res.status(200).json({ message: 'Camera updated successfully' });
+
     } catch (error) {
       console.error('Failed to update camera:', error);
       res.status(500).json({ error: 'Failed to update camera' });

@@ -80,7 +80,7 @@ export default function ConfigPage() {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(editForm)
-        });4101
+        });
         if (res.ok) {
             cancelEdit();
             fetchConfigs();
