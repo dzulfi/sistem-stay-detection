@@ -9,10 +9,16 @@ export default function RecognitionPage() {
         async function fetchCameras() {
             try {
                 const res = await fetch("http://localhost:5000/api/cameras");
-                const data = await res.json();
-                setCameras(data);
+                if (res.ok){
+                    const data = await res.json();
+                    setCameras(data);
+                } else {
+                    console.log("gagal akses kamera");
+                    console.warn("Response gagal. Mungkin backend tidak aktif");
+                }
             } catch (error) {
-                console.error("Failed to fetch cameras:", error);
+                window.alert("Silahkan hidupkan python dahulu");
+                console.warn("Tidak bisa terhubung ke backend. Pastikan server pyhon aktif");
             }
         }
 
