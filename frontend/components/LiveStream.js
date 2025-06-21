@@ -3,7 +3,7 @@ export default function LiveStream({ camera }) {
         <div className="p-2 w-full md:w-1/2 lg:w-1/3">
             <h3 className="text-lg font-semibold mb-1">{camera.name_camera}</h3>
             <img
-                src={`http://localhost:5000/video_feed/${camera._id}`}
+                src={`http://localhost:5000/video_feed/${camera._id}`} 
                 alt={`Stream - ${camera.name_camera}`}
                 className="border border-gray-400 w-full h-auto rounded-lg"
             />

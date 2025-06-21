@@ -32,7 +32,7 @@ export default function RecognitionPage() {
     return (
         <div className="p-6">
             <h1 className="text-2xl font-bold mb-4">Recognition</h1>
-            <div className="flex flex-wrap -mx-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap4">
                 {cameras.map((cam) => (
                     <LiveStream key={cam._id} camera={cam} />
                 ))}

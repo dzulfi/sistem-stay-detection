@@ -27,21 +27,24 @@ class VideoStream:
 
 class StreamProcessor:
   # menangkap real time camera cctv
-  def __init__(self, camera_url):
+  def __init__(self, camera_url, cam_id=None):
     # self.cap = cv2.VideoCapture("rtsp://admin:Joglo631999@192.168.200.40:554/live/0/MAIN", cv2.CAP_FFMPEG)
     # camera = "rtsp://admin:Joglo631999@192.168.200.40:554/live/0/MAIN"
     # camera = "rtsp://192.168.200.23:554/LiveMedia/ch1/Media2?src=onvif"
+    self.cam_id = cam_id # Simpan ID kamera
     self.cap = VideoStream(camera_url)
     self.detector = PersonDetector()
-    self.tracker = CentroidTracker()
+    self.tracker = CentroidTracker(cam_id=cam_id) # Diteruskan ke tracker
     self.logger = Logger()
     self.output_frame = None
     self.lock = Lock()
 
   def run(self):
+    print(f"[RUN] mulai loop kamera {self.cam_id}")
     while True:
       ret, frame = self.cap.read()
       if not ret:
+        print(f"[warn] kamera {self.cam_id} gagal baca frame")
         continue
       frame = cv2.resize(frame, (800, 400))
       persons = self.detector.detect(frame)

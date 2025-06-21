@@ -1,15 +1,14 @@
 import cv2
 import numpy as np
 from .utils import get_centroid, euclidean, format_duration
-# from ultralytics.trackers.byte_tracker import BYTETracker #tambahan untuk meningkatkan pelacakan agar tidak gonta-ganti ID ( harus mengganti self.trackers )
 
 class CentroidTracker:
-  def __init__(self):
+  def __init__(self, cam_id=None):
     self.trackers = {}
-    # self.tracker = BYTETracker()
+    self.cam_id = cam_id
     self.next_id = 0
-    self.MAX_DISAPPEAR = 4 # Durasi bounding menghilang
-    self.MATCH_DISTANCE = 70 # jarak antara bounding jika terlalu kecil (30) menyebabkan bounding dan id berganti-ganti
+    self.MAX_DISAPPEAR = 3
+    self.MATCH_DISTANCE = 50
 
   def update(self, boxes, current_time, frame, logger):
     matched_ids = set()
@@ -35,25 +34,19 @@ class CentroidTracker:
         self.next_id += 1
 
     to_delete = []
-    # for tid, data in self.trackers.items():
-    #   if tid not in matched_ids and current_time - data["last_seen"] > self.MAX_DISAPPEAR:
-    #     stay_duration = current_time - data["start_time"]
-    #     if stay_duration >= 5:
-    #       logger.save(data, frame)
-    #     else:
-    #       print(f"[SKIP] ID {tid} tinggal hanya {stay_duration:.2f} detik, abaikan.")
-    #     to_delete.append(tid)
     for tid, data in self.trackers.items():
       stay_duration = current_time - data["start_time"]
 
-      # Jika sudah 5 detik dan belum dicapture, capture sekarang
-      if stay_duration >= 5 and not data.get("captured", False):
-        logger.save(data, frame)
-        data["captured"] = True # tandai sudah disimpan
+      if stay_duration >= 5.0 and not data.get("captured", False):
+        success = logger.save(data, frame, self.cam_id)
+        if success:
+          data["captured"] = True
 
-      # Hapus tracker jika terlalu lama tidak terlihat
       if tid not in matched_ids and current_time - data["last_seen"] > self.MAX_DISAPPEAR:
+        if not data.get("captured", False) and stay_duration >= 5.0:
+          logger.save(data, frame, self.cam_id)
         to_delete.append(tid)
+
     for tid in to_delete:
       del self.trackers[tid]
 
