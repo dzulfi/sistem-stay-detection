@@ -11,9 +11,9 @@ class Logger:
     area = w * h
     ratio = h / (w + 1e-5)
 
-    if area < 2500 or ratio < 1.2:
-      print(f"[SKIP] Person ID {data['id']} tidak memenuhi filter ukuran.")
-      return False
+    # if area < 10000 or ratio < 1.2:
+    #   print(f"[SKIP] Person ID {data['id']} camera {[cam_id]} tidak memenuhi filter ukuran.")
+    #   return False
 
     cropped = frame[y1:y2, x1:x2]
     if cropped.size == 0:
@@ -22,8 +22,8 @@ class Logger:
 
     mean_color = cv2.mean(cropped)[:3]
     brightness = sum(mean_color) / 3
-    if brightness < 99:
-      print(f"[SKIP] Crop terlalu gelap, ID {data['id']}")
+    if brightness < 30:
+      print(f"[SKIP] Crop terlalu gelap, ID {data['id']} camera {[cam_id]}")
       return False
 
     cropped = cv2.resize(cropped, (200, 400), interpolation=cv2.INTER_CUBIC)
