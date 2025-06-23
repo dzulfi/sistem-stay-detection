@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import DateChart from "../components/DateChart";
 import MonthChart from "../components/MonthChart";
+import WeeklyAverageChart from "../components/WeeklyAverageChart";
 
 export default function Dashboard() {
     const [logs, setLogs] = useState([]);
@@ -17,6 +18,9 @@ export default function Dashboard() {
             <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
                 <DateChart logs={logs} />
                 <MonthChart logs={logs} />
+            </div>
+            <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+                <WeeklyAverageChart logs={logs} />
             </div>
         </div>
     )
